@@ -1,0 +1,16 @@
+{
+  "name": "w01-site",
+  "version": "1.0.0",
+  "description": "CSE 340 W01 - Service Projects site",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2"
+  }
+}
