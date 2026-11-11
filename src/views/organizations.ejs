@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <header class="page-heading"><p class="eyebrow">The people behind the purpose</p><h1><%= title %></h1><p>Here are a few of our partner organizations. Meet the groups that bring people together to make a difference.</p></header>
+  <div class="collection-meta"><span class="status-dot" aria-hidden="true"></span><p><%= organizations.length %> partner organizations</p><span>Connected by a shared purpose</span></div>
+  <ul class="organization-grid">
+    <% for (const [index, organization] of organizations.entries()) { %>
+      <li class="organization-card" id="organization-<%= organization.organization_id %>">
+        <div class="organization-art"><span class="card-index">Partner <%= String(index + 1).padStart(2, '0') %></span><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" width="100" height="100"></div>
+        <div class="organization-content"><p class="eyebrow">Partner organization</p><h2><%= organization.name %></h2><p class="organization-description"><%= organization.description %></p><a class="contact-link" href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %> <span aria-hidden="true">↗</span></a></div>
+      </li>
+    <% } %>
+  </ul>
+  <% if (organizations.length === 0) { %><p>No partner organizations are available yet.</p><% } %>
+  <aside class="callout"><div><p class="eyebrow">Put your time to good use</p><h2>Find a project that speaks to you.</h2></div><a class="button button-primary" href="/projects">Browse projects <span aria-hidden="true">↗</span></a></aside>
+</main>
+<%- include('partials/footer') %>

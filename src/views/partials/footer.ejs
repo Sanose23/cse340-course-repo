@@ -1,0 +1,18 @@
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="footer-brand" href="/">CSE 340 <span>Service Network</span></a>
+        <p>Small acts. Stronger communities.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <ul class="footer-links">
+          <% for (const item of navigation) { %>
+            <li><a href="<%= item.href %>"><%= item.label %></a></li>
+          <% } %>
+        </ul>
+      </nav>
+      <p class="copyright">&copy; <%= new Date().getFullYear() %> CSE 340 Service Network.</p>
+    </div>
+  </footer>
+</body>
+</html>

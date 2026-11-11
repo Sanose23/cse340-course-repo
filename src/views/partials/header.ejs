@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connect with partner organizations and explore environmental, educational, community, and wellness service opportunities.">
+  <title><%= title %> | CSE 340 Service Network</title>
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="CSE 340 Service Network home">
+        <img src="/images/cse340-service-network.png" alt="CSE 340 Service Network Logo" width="350" height="154">
+      </a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-list">
+          <% for (const item of navigation) { %>
+            <li><a href="<%= item.href %>" <% if (currentPath === item.href) { %>aria-current="page"<% } %>><%= item.label %></a></li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  </header>

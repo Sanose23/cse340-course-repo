@@ -1,0 +1,249 @@
+W02 COACHING SESSION TRANSCRIPT
+
+Student: Joseph Lawal
+Project: CSE 340 Service Network
+Assignment: Week 02 Coaching Session
+Course source: https://byui-cse.github.io/cse340-ww-course-v2/week02/coaching.html
+Date: November 11, 2026
+
+COACH:
+Welcome. This is a supportive coaching session, not a test. We will discuss four Week 2 topics: relational database design, Node.js data access, Express routing, and EJS rendering. It is fine to correct an answer as we work. Let us begin with the database design.
+
+```sql
+CREATE TABLE project (
+    project_id SERIAL PRIMARY KEY,
+    organization_id INTEGER NOT NULL REFERENCES organization (organization_id),
+    title VARCHAR(150) NOT NULL,
+    description TEXT NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    date DATE NOT NULL
+);
+
+CREATE TABLE project_category (
+    project_id INTEGER NOT NULL REFERENCES project (project_id) ON DELETE CASCADE,
+    category_id INTEGER NOT NULL REFERENCES category (category_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, category_id)
+);
+```
+
+What relationship exists between organizations and projects?
+
+JOSEPH:
+One organization can sponsor many projects, while each project has one organization through organization_id.
+
+COACH:
+Correct. The foreign key is on the many side of the one-to-many relationship. What protection does that foreign key provide?
+
+JOSEPH:
+It stops a project from using an organization ID that does not exist, so the project cannot become an orphan.
+
+COACH:
+Exactly. What relationship does `project_category` represent?
+
+JOSEPH:
+It represents many-to-many because a project can have several categories and a category can contain several projects.
+
+COACH:
+Why is the primary key made from both IDs?
+
+JOSEPH:
+The pair uniquely identifies one project and category relationship and prevents the same relationship from being inserted twice.
+
+COACH:
+Good. Why are `title`, `description`, `location`, and `date` marked `NOT NULL`?
+
+JOSEPH:
+Those fields are required for every service project, so the database should reject incomplete records instead of leaving the application to guess what is missing.
+
+COACH:
+That is an important point: database constraints enforce integrity regardless of which code sends the query. What does `ON DELETE CASCADE` do on the junction table?
+
+JOSEPH:
+If a project or category is deleted, PostgreSQL automatically removes its matching junction rows so they do not become orphaned links.
+
+COACH:
+Correct. It does not delete the other parent record; it only removes the affected relationship rows. Now let us look at Node.js data access.
+
+```js
+import db from './db.js';
+
+const getAllProjects = async () => {
+  const query = `
+    SELECT p.project_id, p.organization_id, p.title, p.description, p.location,
+           TO_CHAR(p.date, 'YYYY-MM-DD') AS date, o.name AS organization_name
+    FROM project AS p
+    JOIN organization AS o ON o.organization_id = p.organization_id
+    ORDER BY p.date, p.project_id;
+  `;
+  const result = await db.query(query);
+  return result.rows;
+};
+```
+
+What is the purpose of the `JOIN`?
+
+JOSEPH:
+The project table stores the sponsor ID, but the page needs the sponsor name. The join matches each project to its organization and returns the organization name with the project.
+
+COACH:
+Correct. Why does the query explicitly name columns instead of using `SELECT *`?
+
+JOSEPH:
+It makes the data contract clear and returns only what the page needs. It also avoids conflicts when joined tables have columns with similar names.
+
+COACH:
+Yes. What does `await db.query(query)` return?
+
+JOSEPH:
+It resolves to a PostgreSQL result object. The actual records are in `result.rows`.
+
+COACH:
+Why does the model return `result.rows` rather than the entire result object?
+
+JOSEPH:
+The route and view only need the project records. Returning rows keeps database metadata out of the presentation flow.
+
+COACH:
+Good. Why keep this query in `src/models/projects.js` instead of placing it directly in `server.js`?
+
+JOSEPH:
+It separates database access from HTTP routing, makes the query reusable, and makes each layer easier to test and maintain.
+
+COACH:
+Exactly. What happens if the query fails?
+
+JOSEPH:
+The awaited promise rejects. The route catches the error and passes it to Express error middleware instead of pretending it received valid rows.
+
+COACH:
+Correct. A failed query is different from a successful query that returns an empty `rows` array. Now consider the Express route.
+
+```js
+app.get('/projects', async (req, res, next) => {
+  try {
+    const projects = await getAllProjects();
+    const title = 'Service Projects';
+    res.render('projects', { title, currentPath: '/projects', projects });
+  } catch (error) {
+    next(error);
+  }
+});
+```
+
+Describe the request flow when a browser requests `/projects`.
+
+JOSEPH:
+Express matches the GET route, the route awaits the model, the model queries PostgreSQL, and the rows return to the route. The route then gives the title and projects to EJS, which renders HTML for the response.
+
+COACH:
+Correct. Why must this handler be declared `async`?
+
+JOSEPH:
+Because it uses `await` for the asynchronous database call.
+
+COACH:
+Why is `next(error)` important in this Express 4 project?
+
+JOSEPH:
+It forwards the rejected database operation to the shared error middleware so the server returns a controlled 500 page instead of leaving the request unfinished.
+
+COACH:
+Exactly. What is the role of `currentPath`?
+
+JOSEPH:
+The shared header compares it to each navigation URL and marks Projects as the current page.
+
+COACH:
+Why should `res.render()` happen only after `await getAllProjects()` succeeds?
+
+JOSEPH:
+The view needs the resolved array. Rendering before the promise finishes would give it missing data, and rendering after an error would send an incorrect success response.
+
+COACH:
+Correct. Can this route safely send another response after `res.render()`?
+
+JOSEPH:
+No. The route should complete the response once. Sending another response would cause a headers-already-sent error.
+
+COACH:
+Good. Now let us inspect the EJS rendering.
+
+```ejs
+<% for (const project of projects) { %>
+  <article>
+    <h2>
+      <time datetime="<%= project.date %>">
+        <%= new Date(`${project.date}T00:00:00Z`).toLocaleDateString(
+          'en-US',
+          { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' }
+        ) %>
+      </time>:
+      <%= project.title %> (<em><%= project.organization_name %></em>)
+    </h2>
+    <p><%= project.description %></p>
+    <p><strong>Location:</strong> <%= project.location %></p>
+  </article>
+<% } %>
+```
+
+Where does this EJS execute, and what reaches the browser?
+
+JOSEPH:
+EJS executes on the Node.js server. The browser receives ordinary rendered HTML, not EJS tags or the database result object.
+
+COACH:
+Correct. What does the `for...of` loop do?
+
+JOSEPH:
+It goes through every project row and generates one article with the date, title, sponsor, description, and location.
+
+COACH:
+Why use `<%= ... %>` for these values?
+
+JOSEPH:
+It escapes the values before putting them into HTML, which helps prevent database text from being treated as markup or script.
+
+COACH:
+Exactly. How is `<%- ... %>` different?
+
+JOSEPH:
+It outputs unescaped HTML. In this project it is only used for trusted header and footer partial includes, not database values.
+
+COACH:
+Why add `T00:00:00Z` and use the UTC time zone when formatting the date?
+
+JOSEPH:
+A PostgreSQL date is a calendar date without a time. Formatting it consistently in UTC prevents the displayed day from shifting because of the server's local time zone.
+
+COACH:
+Good. What required output format does this heading implement?
+
+JOSEPH:
+It implements Date: Project Title (Organization Name), with the organization name italicized.
+
+COACH:
+Correct. Let us connect all four topics. If a project page shows no sponsor name, how would you debug it?
+
+JOSEPH:
+I would check whether the project has a valid organization foreign key, run the join query directly, inspect `result.rows` in the model, confirm the route passes `projects`, and then confirm the EJS property is named `organization_name`.
+
+COACH:
+That is a strong layer-by-layer process. What if the page returns HTTP 500 instead of an empty list?
+
+JOSEPH:
+That suggests the database connection or query failed. I would read the server error, test the connection, verify the table and column names, and run the SQL separately. An empty list would mean the query succeeded but found no rows.
+
+COACH:
+Exactly. Why is hiding database credentials from error pages important?
+
+JOSEPH:
+Connection strings contain private host, user, and password information. The server can log a safe error code, but users should receive a generic message.
+
+COACH:
+What is your main Week 2 takeaway?
+
+JOSEPH:
+The database protects relationships and required data, the model owns SQL, the Express route coordinates the request and response, and EJS safely turns the returned rows into HTML. Testing each layer makes it easier to tell whether a problem is in the connection, query, route, or view.
+
+COACH:
+Well summarized. You discussed all four required areas with meaningful code: relational design and relationships, Node.js data-access logic, Express routing, and EJS rendering. The coaching session is complete.

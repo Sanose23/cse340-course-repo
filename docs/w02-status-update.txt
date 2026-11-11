@@ -1,0 +1,6 @@
+W02 60-SECOND STATUS UPDATE
+Student: Joseph Lawal
+
+This week, the most positive experience was seeing the full data flow work from PostgreSQL through the Node.js models and Express routes into the EJS pages. Creating the organization, project, category, and junction tables helped me understand how primary keys, foreign keys, and many-to-many relationships work together. The most difficult part was configuring and testing the database connection because a connection problem, a SQL problem, and an empty query can initially look similar.
+
+Next week, I will test each layer as I build it instead of waiting until the end. I will verify the SQL first, then the model result, then the route, and finally the rendered page. My main concern is continuing to recognize which layer is responsible when a dynamic page fails, but the request-flow and integration tests from this week give me a clear troubleshooting process.

@@ -1,16 +1,32 @@
 {
-  "name": "w01-site",
+  "name": "cse340",
   "version": "1.0.0",
-  "description": "CSE 340 W01 - Service Projects site",
-  "type": "module",
+  "description": "CSE 340 Service Network \u2014 W02 Database Retrieval",
   "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+  "engines": {
+    "node": "22.x"
   },
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node server.js",
+    "verify": "node --env-file-if-exists=.env scripts/verify.js",
+    "verify:w02": "node --env-file-if-exists=.env scripts/verify-w02.js",
+    "db:setup": "node --env-file-if-exists=.env scripts/setup-db.js"
+  },
+  "author": "Joseph Lawal",
+  "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "ejs": "^3.1.10",
-    "express": "^4.19.2"
+    "ejs": "^7.0.2",
+    "express": "^4.18.2",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "type": "module",
+  "homepage": "https://cse340-course-repo-lvip.onrender.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sanose23/cse340-course-repo.git"
   }
 }

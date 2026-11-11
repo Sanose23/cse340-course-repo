@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <header class="page-heading"><p class="eyebrow">Different passions. A shared purpose.</p><h1><%= title %></h1><p>Start with what you care about. These areas of service offer different ways to support the community around you.</p></header>
+  <ul class="category-grid">
+    <% for (const [index, category] of categories.entries()) { %>
+      <li class="category-card accent-<%= ['green', 'blue', 'amber', 'rose'][index % 4] %>" id="category-<%= category.category_id %>">
+        <span class="category-number"><%= String(index + 1).padStart(2, '0') %></span><h2><%= category.name %></h2>
+      </li>
+    <% } %>
+  </ul>
+  <% if (categories.length === 0) { %><p>No service categories are available yet.</p><% } %>
+  <aside class="category-note"><span class="status-dot" aria-hidden="true"></span><p>You do not need to do everything. Find one way to help, and start there.</p></aside>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "DigitalBrainstem.javascript-ejs-support",
+    "sleistner.vscode-fileutils",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    "xabikos.JavaScriptSnippets"
+  ]
+}
