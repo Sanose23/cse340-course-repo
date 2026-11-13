@@ -1,7 +1,7 @@
 {
   "name": "cse340",
   "version": "1.0.0",
-  "description": "CSE 340 Service Network \u2014 W02 Database Retrieval",
+  "description": "CSE 340 Service Network \u2014 W03 MVC Implementation",
   "main": "server.js",
   "engines": {
     "node": "22.x"
@@ -11,6 +11,7 @@
     "start": "node server.js",
     "verify": "node --env-file-if-exists=.env scripts/verify.js",
     "verify:w02": "node --env-file-if-exists=.env scripts/verify-w02.js",
+    "verify:w03": "node --env-file-if-exists=.env scripts/verify-w03.js",
     "db:setup": "node --env-file-if-exists=.env scripts/setup-db.js"
   },
   "author": "Joseph Lawal",

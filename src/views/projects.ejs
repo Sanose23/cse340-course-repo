@@ -1,20 +1,21 @@
 <%- include('partials/header') %>
 <main tabindex="-1" id="main-content" class="container directory-main">
   <header class="page-heading"><p class="eyebrow">Make time for what matters</p><h1><%= title %></h1><p>There is more than one way to make a difference. Explore a project and find a meaningful place to start.</p></header>
-  <div class="section-heading project-section-heading"><h2>Upcoming Service Projects</h2><span class="collection-count"><%= projects.length %> projects to explore</span></div>
+  <div class="section-heading project-section-heading"><h2>Next opportunities</h2><span class="collection-count"><%= projects.length %> projects to explore</span></div>
   <ul class="project-list">
     <% for (const [index, project] of projects.entries()) { %>
       <li class="project-card" id="project-<%= project.project_id %>">
         <span class="project-number" aria-hidden="true"><%= String(index + 1).padStart(2, '0') %></span>
         <div class="project-content">
-          <h3><time datetime="<%= project.date %>"><%= new Date(`${project.date}T00:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' }) %></time>: <%= project.title %> (<em><%= project.organization_name %></em>)</h3>
-          <p><%= project.description %></p><p><strong>Location:</strong> <%= project.location %></p>
+          <h3><a class="card-title-link" href="/project/<%= project.project_id %>"><%= project.title %></a></h3>
+          <p><time datetime="<%= project.date %>"><%= new Date(`${project.date}T00:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' }) %></time> · <%= project.location %></p>
+          <p>Hosted by <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></p>
         </div>
-        <a class="project-category-link text-link" href="/organizations#organization-<%= project.organization_id %>" aria-label="Meet <%= project.organization_name %>">Meet the sponsor <span aria-hidden="true">↗</span></a>
+        <a class="project-category-link text-link" href="/project/<%= project.project_id %>" aria-label="View <%= project.title %>">View project <span aria-hidden="true">↗</span></a>
       </li>
     <% } %>
   </ul>
-  <% if (projects.length === 0) { %><p>No service projects are available yet.</p><% } %>
+  <% if (projects.length === 0) { %><p>No upcoming service projects are available yet.</p><% } %>
   <aside class="callout"><div><p class="eyebrow">Find your community</p><h2>Get to know our partner organizations.</h2></div><a class="button button-secondary" href="/organizations">Meet our partners <span aria-hidden="true">↗</span></a></aside>
 </main>
 <%- include('partials/footer') %>

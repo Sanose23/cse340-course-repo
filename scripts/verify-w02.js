@@ -102,22 +102,30 @@ try {
   `, [organization.rows[0].organization_id, `New ${unsafe}`, 'New project description', 'New test location', '2027-01-02']);
   await client.query('INSERT INTO project_category VALUES ($1, $2)', [project.rows[0].project_id, category.rows[0].category_id]);
 
-  for (const route of ['/', '/organizations', '/projects', '/categories']) {
+  for (const route of [
+    '/',
+    '/organizations',
+    `/organization/${organization.rows[0].organization_id}`,
+    '/categories',
+    `/category/${category.rows[0].category_id}`,
+  ]) {
     const response = await fetch(`${baseUrl}${route}`, { signal: AbortSignal.timeout(15000) });
     const html = await response.text();
     assert.equal(response.status, 200, `${route}: dynamic data renders`);
     assert.ok(html.includes(escaped) && !html.includes(unsafe), `${route}: new database names are escaped`);
-    if (route === '/projects') {
-      assert.ok(html.includes('January 2, 2027') && html.includes('New test location'), 'New date and location render');
-    }
   }
+  const newProject = await fetch(`${baseUrl}/project/${project.rows[0].project_id}`, { signal: AbortSignal.timeout(15000) });
+  const newProjectHtml = await newProject.text();
+  assert.equal(newProject.status, 200, 'New project detail renders');
+  assert.ok(newProjectHtml.includes(escaped) && !newProjectHtml.includes(unsafe), 'New project data is escaped');
+  assert.ok(newProjectHtml.includes('January 2, 2027') && newProjectHtml.includes('New test location'), 'New date and location render');
   console.log('PASS newly inserted database records flow through models, routes, and EJS safely');
 
   await client.query('ALTER TABLE category RENAME TO unavailable_category');
   const failure = await fetch(`${baseUrl}/categories`, { signal: AbortSignal.timeout(15000) });
   const failureHtml = await failure.text();
   assert.equal(failure.status, 500, 'Query failure returns HTTP 500');
-  assert.ok(failureHtml.includes('We could not load this page'), 'Query failure displays a useful error page');
+  assert.ok(failureHtml.includes('We could not complete this request'), 'Query failure displays a useful error page');
   assert.ok(!failureHtml.includes('unavailable_category') && !failureHtml.includes(connectionString), 'Error page hides database details');
   await client.query('ALTER TABLE unavailable_category RENAME TO category');
   assert.equal((await fetch(`${baseUrl}/categories`)).status, 200, 'Application recovers after query failure');

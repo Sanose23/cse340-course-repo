@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/organizations">Organizations</a><span aria-hidden="true">/</span><span><%= organization.name %></span></nav>
+  <article class="detail-layout organization-detail">
+    <div class="detail-art"><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" width="180" height="180"></div>
+    <div class="detail-content">
+      <p class="eyebrow">Partner organization</p>
+      <h1><%= organization.name %></h1>
+      <p class="detail-description"><%= organization.description %></p>
+      <a class="contact-link" href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %> <span aria-hidden="true">↗</span></a>
+    </div>
+  </article>
+  <section class="related-section" aria-labelledby="organization-projects-heading">
+    <div class="section-heading"><div><p class="eyebrow">Ways to help</p><h2 id="organization-projects-heading">Service projects from this partner</h2></div><span class="collection-count"><%= projects.length %> projects</span></div>
+    <ul class="related-list">
+      <% for (const project of projects) { %>
+        <li><a href="/project/<%= project.project_id %>"><span><time datetime="<%= project.date %>"><%= new Date(`${project.date}T00:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' }) %></time></span><strong><%= project.title %></strong><span aria-hidden="true">↗</span></a></li>
+      <% } %>
+    </ul>
+    <% if (projects.length === 0) { %><p>No service projects are available for this organization yet.</p><% } %>
+  </section>
+</main>
+<%- include('partials/footer') %>

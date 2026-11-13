@@ -1,0 +1,352 @@
+W03 COACHING SESSION TRANSCRIPT
+
+Student: Joseph Lawal
+Project: CSE 340 Service Network
+Assignment: Week 03 Coaching Session
+Course source: https://byui-cse.github.io/cse340-ww-course-v2/week03/coaching.html
+Date: November 12, 2026
+
+COACH:
+Welcome! Just to be clear from the start, this is a coaching session, not a test. It is perfectly okay—and even encouraged—to say 'I don't know' or 'I made a mistake.' That's the fastest way we'll learn today.
+
+I am your supportive and non-judgmental Learning Coach and Software Mentor. This is a safe learning space where mistakes are encouraged. Is your name Joseph Lawal?
+
+JOSEPH:
+Yes, my name is Joseph Lawal.
+
+COACH:
+Thank you, Joseph. We will discuss code from your Week 3 project in four areas: models, views, controllers, and error handling. Let us begin with this model function from `src/models/projects.js`.
+
+```js
+const getProjectDetails = async (projectId) => {
+  const query = `
+    SELECT p.project_id, p.organization_id, p.title, p.description, p.location,
+           TO_CHAR(p.date, 'YYYY-MM-DD') AS date, o.name AS organization_name
+    FROM project AS p
+    JOIN organization AS o ON o.organization_id = p.organization_id
+    WHERE p.project_id = $1;
+  `;
+  const result = await db.query(query, [projectId]);
+  return result.rows[0] || null;
+};
+```
+
+What responsibility does this model function have?
+
+JOSEPH:
+It retrieves one service project from PostgreSQL using the project ID and returns a project object or null. It also joins the organization so the page receives the sponsor name with the project data.
+
+COACH:
+Correct. Why does the function accept `projectId` as a parameter instead of reading `req.params.id` itself?
+
+JOSEPH:
+The model should not depend on Express request objects. The controller reads the HTTP parameter and gives the model only the value needed for the data operation, which keeps the model reusable outside that route.
+
+COACH:
+Exactly. What does `$1` mean in this SQL query?
+
+JOSEPH:
+It is a PostgreSQL placeholder. The first value in `[projectId]` is bound to it when `db.query` runs.
+
+COACH:
+Correct. Why is that safer than inserting the ID into the SQL string with template interpolation?
+
+JOSEPH:
+Binding keeps the value separate from SQL syntax. A malicious route value cannot change the query structure, which helps prevent SQL injection.
+
+COACH:
+Good. Why does this query need the `JOIN organization` clause?
+
+JOSEPH:
+The project table stores `organization_id`, but the detail page also needs the readable organization name. The join matches the foreign key to the organization row and aliases its name as `organization_name`.
+
+COACH:
+Exactly. Why does the function return `result.rows[0] || null`?
+
+JOSEPH:
+The ID should identify at most one project. The first row is the project when it exists, and null gives the controller an explicit missing-resource result when no row matches.
+
+COACH:
+Correct. Your model also includes this function.
+
+```js
+const getUpcomingProjects = async (numberOfProjects) => {
+  const query = `
+    SELECT p.project_id, p.organization_id, p.title, p.description, p.location,
+           TO_CHAR(p.date, 'YYYY-MM-DD') AS date, o.name AS organization_name
+    FROM project AS p
+    JOIN organization AS o ON o.organization_id = p.organization_id
+    WHERE p.date >= CURRENT_DATE
+    ORDER BY p.date, p.project_id
+    LIMIT $1;
+  `;
+  const result = await db.query(query, [numberOfProjects]);
+  return result.rows;
+};
+```
+
+Why should the model limit the result instead of letting EJS render only the first five rows?
+
+JOSEPH:
+The database should return only the records the page needs. That avoids retrieving and transferring unnecessary rows, and it keeps data-selection rules in the model rather than presentation logic in the view.
+
+COACH:
+Exactly. Why is `p.project_id` included after `p.date` in the `ORDER BY`?
+
+JOSEPH:
+It makes the order deterministic when multiple projects share the same date.
+
+COACH:
+Correct. How is an empty result different from a rejected database query?
+
+JOSEPH:
+An empty rows array means the query succeeded but no upcoming records matched. A rejection means the database connection or SQL operation failed and should move to error handling.
+
+COACH:
+Well explained. That covers model parameters, placeholders, joins, and result contracts. Now let us examine a view snippet from `src/views/project.ejs`.
+
+```ejs
+<dl class="detail-facts">
+  <div>
+    <dt>Partner</dt>
+    <dd>
+      <a href="/organization/<%= project.organization_id %>">
+        <%= project.organization_name %>
+      </a>
+    </dd>
+  </div>
+</dl>
+<div class="tag-list">
+  <% for (const category of categories) { %>
+    <a class="category-tag" href="/category/<%= category.category_id %>">
+      <%= category.name %>
+    </a>
+  <% } %>
+</div>
+```
+
+How does EJS turn the organization data into a working link?
+
+JOSEPH:
+The server evaluates `project.organization_id` inside the `href`, so a project with organization ID 1 becomes `/organization/1`. It also escapes and inserts `organization_name` as the visible link text before sending ordinary HTML to the browser.
+
+COACH:
+Correct. Why use a route parameter in `/organization/1` rather than a query-string version of that URL?
+
+JOSEPH:
+The ID identifies the specific organization resource, so it belongs in the path. Query parameters are more appropriate for optional changes such as sorting, filtering, or pagination.
+
+COACH:
+Exactly. Why are `<%= ... %>` tags used for the ID and name?
+
+JOSEPH:
+Those tags escape HTML output. Database content can still contain unsafe text, so escaped output prevents it from being interpreted as markup or script.
+
+COACH:
+Correct. When is `<%- ... %>` appropriate in this project?
+
+JOSEPH:
+It is used for trusted local partials such as the header and footer because those includes intentionally produce HTML. It should not be used for database or user-supplied values.
+
+COACH:
+Good. What does the category loop render for a project that belongs to two categories?
+
+JOSEPH:
+It renders two separate anchor elements, one for each category. Each tag shows the escaped category name and links to that category's detail route.
+
+COACH:
+Exactly. Where do `project` and `categories` come from before this template executes?
+
+JOSEPH:
+The project controller asks model functions for the project and its categories, then passes both values in the object supplied to `res.render('project', ...)`.
+
+COACH:
+Correct. Does the browser receive the EJS loop and JavaScript objects?
+
+JOSEPH:
+No. EJS runs on the Node.js server, and the browser receives only the generated HTML.
+
+COACH:
+Good. Why is the project title link in the projects list built in the view rather than in the model?
+
+JOSEPH:
+The model should return data, not HTML or presentation URLs. The view is responsible for turning IDs and labels into interface markup.
+
+COACH:
+Exactly. That covers view data flow, escaped output, and inserting data into links. Now let us discuss the routing and controller code from `src/routes.js` and `src/controllers/projects.js`.
+
+```js
+router.get('/project/:id', asyncHandler(showProjectDetailsPage));
+
+const showProjectDetailsPage = async (req, res) => {
+  const projectId = req.params.id;
+  if (!/^\d+$/.test(projectId)) {
+    const error = new Error('Service project not found');
+    error.status = 404;
+    throw error;
+  }
+  const project = await getProjectDetails(projectId);
+  if (!project) {
+    const error = new Error('Service project not found');
+    error.status = 404;
+    throw error;
+  }
+  const categories = await getCategoriesByProjectId(projectId);
+  const title = project.title;
+  res.render('project', { title, currentPath: '/projects', project, categories });
+};
+```
+
+What value does Express place in `req.params.id` for a request to `/project/7`?
+
+JOSEPH:
+It places the string `7` there because `:id` captures that path segment.
+
+COACH:
+Correct. What is the controller's main responsibility in this flow?
+
+JOSEPH:
+It coordinates the request. It reads and validates the route parameter, asks models for the required data, handles a missing project as a 404, prepares the page title and navigation state, and chooses the EJS view.
+
+COACH:
+Exactly. Why does the controller contain no SQL?
+
+JOSEPH:
+SQL belongs in the model layer. Keeping it out of the controller preserves separation of concerns and makes both request coordination and data access easier to maintain and test.
+
+COACH:
+Correct. Why validate the ID with a numeric regular expression before calling PostgreSQL?
+
+JOSEPH:
+A malformed value such as `abc` cannot identify an integer project. Rejecting it as a missing resource avoids an unnecessary query and prevents PostgreSQL's integer-cast error from being treated as an unexpected server failure.
+
+COACH:
+Good. Why check `if (!project)` before retrieving categories?
+
+JOSEPH:
+If the project does not exist, there is no valid detail page to render. Returning the 404 first avoids a second query that cannot change that result.
+
+COACH:
+Exactly. What does `currentPath: '/projects'` accomplish on a detail URL?
+
+JOSEPH:
+It keeps the Projects navigation item marked as the active section even though the exact browser path includes a project ID.
+
+COACH:
+Correct. What does `asyncHandler` contribute to this route in Express 4?
+
+JOSEPH:
+It catches a rejected promise from the async controller and calls `next(error)`. Express 4 does not automatically forward all async rejections, so the wrapper sends failures to centralized error middleware instead of letting the process fail.
+
+COACH:
+Exactly. Why is `src/routes.js` separate from the controller module?
+
+JOSEPH:
+The route file defines which method and path map to each handler, while the controller defines what happens for the request. That keeps route declarations easy to scan and prevents `server.js` from collecting feature logic.
+
+COACH:
+Good. Trace a successful `/project/7` request through the MVC layers.
+
+JOSEPH:
+Express matches the route in `src/routes.js`, the async wrapper invokes the project controller, the controller reads ID 7 and calls the project model, PostgreSQL returns the joined project row, the controller retrieves its categories, and EJS renders the project view into HTML for the browser.
+
+COACH:
+Well traced. That completes the controller and route-parameter discussion. Let us finish with your error-handling strategy in `server.js`.
+
+```js
+app.use((req, res, next) => {
+  const error = new Error('Page Not Found');
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+  const invalidIdentifier = error.code === '22P02';
+  const isNotFound = error.status === 404 || invalidIdentifier;
+  let status = 500;
+  if (isNotFound) status = 404;
+  console.error('Request failed:', {
+    path: req.path,
+    status,
+    code: error.code || 'SERVER_ERROR',
+    message: error.message,
+  });
+  let title = 'Service Temporarily Unavailable';
+  if (isNotFound) title = 'Page Not Found';
+  res.status(status).render(`errors/${status}`, {
+    title,
+    currentPath: req.path,
+    error: error.message,
+    stack: error.stack,
+  });
+});
+```
+
+Why does the catch-all middleware appear after all normal routes?
+
+JOSEPH:
+Express runs middleware in order. It should create a 404 only after no real route has handled the request, or it would block valid pages.
+
+COACH:
+Correct. Why does the catch-all call `next(error)` instead of rendering the 404 template itself?
+
+JOSEPH:
+It sends 404s through the same centralized error path as other failures. The global handler then owns status selection, logging, template choice, and response formatting.
+
+COACH:
+Exactly. How does Express recognize the second function as error-handling middleware?
+
+JOSEPH:
+It has four parameters, with the error object first: `(error, req, res, next)`.
+
+COACH:
+Correct. What is the difference between the 404 and 500 cases here?
+
+JOSEPH:
+A 404 means the requested route or resource does not exist, so it is a client-side missing-resource response. A 500 means an unexpected server operation failed, such as a database query or rendering problem.
+
+COACH:
+Good. Why does the handler check `res.headersSent`?
+
+JOSEPH:
+If a response has already started, trying to render another page could produce a headers-already-sent failure. Passing the error onward lets Express finish handling that situation safely.
+
+COACH:
+Correct. Why log the error on the server but avoid showing full details in production?
+
+JOSEPH:
+Developers need diagnostic information, but stack traces and database errors can expose paths, implementation details, or credentials. Production users should receive a useful generic message instead.
+
+COACH:
+Exactly. How does the 500 EJS template make development debugging different from production behavior?
+
+JOSEPH:
+It displays the escaped error message and stack only when `NODE_ENV` equals development. In production that conditional block does not render, so visitors see only the safe message.
+
+COACH:
+Correct. What response should `/project/999999` produce when the query succeeds but finds no project?
+
+JOSEPH:
+The model returns null, the controller creates a 404 error, and the centralized handler returns the custom 404 page with HTTP status 404. It should not be treated as a database failure or a 500.
+
+COACH:
+Exactly. What response should `/test-error` produce?
+
+JOSEPH:
+Its controller forwards an error with status 500, so the global handler logs it and sends the custom 500 page with HTTP status 500.
+
+COACH:
+Good. How did you verify that error pages report the correct status rather than merely displaying error text?
+
+JOSEPH:
+The Week 3 integration test requests malformed IDs, missing IDs, an unmatched route, the test-error route, and a forced database failure. It asserts the actual HTTP 404 or 500 status and checks that production responses do not expose internal details.
+
+COACH:
+That is strong verification. What is your main Week 3 takeaway?
+
+JOSEPH:
+MVC gives each layer a clear responsibility: routes map URLs, controllers coordinate requests, models perform parameterized data access, and views render escaped HTML. Async failures and missing resources also need deliberate paths so the application always returns the correct status and a safe, useful page.
+
+COACH:
+Well summarized. You discussed all four required topics with meaningful code from your project: parameterized model functions, EJS data inserted into links, a controller reached through a route parameter, and centralized 404/500 error handling. There is no pass or fail for this activity; the required Week 3 coaching session is complete.

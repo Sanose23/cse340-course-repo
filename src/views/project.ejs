@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/projects">Projects</a><span aria-hidden="true">/</span><span><%= project.title %></span></nav>
+  <article class="detail-layout project-detail">
+    <div class="detail-content">
+      <p class="eyebrow">Service project</p>
+      <h1><%= project.title %></h1>
+      <p class="detail-description"><%= project.description %></p>
+      <dl class="detail-facts">
+        <div><dt>Date</dt><dd><time datetime="<%= project.date %>"><%= new Date(`${project.date}T00:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' }) %></time></dd></div>
+        <div><dt>Location</dt><dd><%= project.location %></dd></div>
+        <div><dt>Partner</dt><dd><a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></dd></div>
+      </dl>
+    </div>
+    <aside class="detail-panel" aria-labelledby="category-tags-heading">
+      <p class="eyebrow" id="category-tags-heading">Project categories</p>
+      <div class="tag-list">
+        <% for (const category of categories) { %>
+          <a class="category-tag" href="/category/<%= category.category_id %>"><%= category.name %></a>
+        <% } %>
+      </div>
+    </aside>
+  </article>
+</main>
+<%- include('partials/footer') %>

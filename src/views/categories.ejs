@@ -4,7 +4,7 @@
   <ul class="category-grid">
     <% for (const [index, category] of categories.entries()) { %>
       <li class="category-card accent-<%= ['green', 'blue', 'amber', 'rose'][index % 4] %>" id="category-<%= category.category_id %>">
-        <span class="category-number"><%= String(index + 1).padStart(2, '0') %></span><h2><%= category.name %></h2>
+        <span class="category-number"><%= String(index + 1).padStart(2, '0') %></span><h2><a class="card-title-link" href="/category/<%= category.category_id %>"><%= category.name %></a></h2><a class="text-link" href="/category/<%= category.category_id %>">Explore projects <span aria-hidden="true">↗</span></a>
       </li>
     <% } %>
   </ul>

@@ -4,9 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { once } from 'node:events';
 import { navigation } from './src/data/site.js';
 import db, { testConnection } from './src/models/db.js';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/routes.js';
 
 const projectDirectory = fileURLToPath(new URL('.', import.meta.url));
 const nodeEnvironment = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -19,61 +17,39 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(projectDirectory, 'src/views'));
 app.locals.navigation = navigation;
 
-app.get('/', async (req, res, next) => {
-  try {
-    const [organizations, projects, categories] = await Promise.all([
-      getAllOrganizations(), getAllProjects(), getAllCategories(),
-    ]);
-    const title = 'Home';
-    res.render('home', { title, currentPath: '/', organizations, projects, categories });
-  } catch (error) {
-    next(error);
-  }
+app.use((req, res, next) => {
+  if (nodeEnvironment === 'development') console.log(`${req.method} ${req.url}`);
+  next();
 });
 
-app.get('/organizations', async (req, res, next) => {
-  try {
-    const organizations = await getAllOrganizations();
-    const title = 'Our Partner Organizations';
-    res.render('organizations', { title, currentPath: '/organizations', organizations });
-  } catch (error) {
-    next(error);
-  }
+app.use((req, res, next) => {
+  res.locals.NODE_ENV = nodeEnvironment;
+  next();
 });
 
-app.get('/projects', async (req, res, next) => {
-  try {
-    const projects = await getAllProjects();
-    const title = 'Service Projects';
-    res.render('projects', { title, currentPath: '/projects', projects });
-  } catch (error) {
-    next(error);
-  }
-});
+app.use(router);
 
-app.get('/categories', async (req, res, next) => {
-  try {
-    const categories = await getAllCategories();
-    const title = 'Service Project Categories';
-    res.render('categories', { title, currentPath: '/categories', categories });
-  } catch (error) {
-    next(error);
-  }
-});
-
-app.use((req, res) => {
-  res.status(404).render('error', {
-    title: 'Page Not Found', currentPath: req.path,
-    message: 'This page could not be found. Use the navigation to explore the service network.',
-  });
+app.use((req, res, next) => {
+  const error = new Error('Page Not Found');
+  error.status = 404;
+  next(error);
 });
 
 app.use((error, req, res, next) => {
   if (res.headersSent) return next(error);
-  console.error('Request failed:', { path: req.path, code: error.code || 'SERVER_ERROR' });
-  res.status(500).render('error', {
-    title: 'Service Temporarily Unavailable', currentPath: req.path,
-    message: 'We could not load this page. Please try again shortly.',
+  const invalidIdentifier = error.code === '22P02';
+  const status = error.status === 404 || invalidIdentifier ? 404 : 500;
+  console.error('Request failed:', {
+    path: req.path,
+    status,
+    code: error.code || 'SERVER_ERROR',
+    message: error.message,
+  });
+  res.status(status).render(`errors/${status}`, {
+    title: status === 404 ? 'Page Not Found' : 'Service Temporarily Unavailable',
+    currentPath: req.path,
+    error: error.message,
+    stack: error.stack,
   });
 });
 

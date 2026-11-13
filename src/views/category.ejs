@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/categories">Categories</a><span aria-hidden="true">/</span><span><%= category.name %></span></nav>
+  <header class="page-heading"><p class="eyebrow">Service category</p><h1><%= category.name %></h1><p>Explore the service projects connected to this area of community work.</p></header>
+  <section class="related-section" aria-labelledby="category-projects-heading">
+    <div class="section-heading"><h2 id="category-projects-heading">Projects in this category</h2><span class="collection-count"><%= projects.length %> projects</span></div>
+    <ul class="related-list">
+      <% for (const project of projects) { %>
+        <li><a href="/project/<%= project.project_id %>"><span><%= project.organization_name %></span><strong><%= project.title %></strong><span aria-hidden="true">↗</span></a></li>
+      <% } %>
+    </ul>
+    <% if (projects.length === 0) { %><p>No service projects are available in this category yet.</p><% } %>
+  </section>
+</main>
+<%- include('partials/footer') %>

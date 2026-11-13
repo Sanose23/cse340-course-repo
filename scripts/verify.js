@@ -9,7 +9,7 @@ const verifySite = async () => {
   const pageSpecs = [
     { path: '/', title: 'Home', content: ['Welcome to the', 'CSE 340', 'Service Network!'] },
     { path: '/organizations', title: 'Our Partner Organizations', content: ['BrightFuture Builders', 'GreenHarvest Growers', 'UnityServe Volunteers', 'info@brightfuturebuilders.org', 'contact@greenharvest.org', 'hello@unityserve.org', 'A nonprofit focused on improving community infrastructure', 'An urban farming collective', 'A volunteer coordination group'] },
-    { path: '/projects', title: 'Service Projects', content: ['Park Cleanup', 'Food Drive', 'Community Tutoring', 'Join us to clean up local parks and make them beautiful!', 'Help collect and distribute food to those in need.', 'Volunteer to tutor students in various subjects.'] },
+    { path: '/projects', title: 'Upcoming Service Projects', content: ['Park Cleanup', 'Community Garden Planting', 'Community Tutoring'] },
     { path: '/categories', title: 'Service Project Categories', content: ['Environmental', 'Educational', 'Community Service', 'Health and Wellness'] },
   ];
   const renderedPages = new Map();
@@ -35,10 +35,10 @@ const verifySite = async () => {
     assert.equal((mainNavigation.match(/aria-current="page"/g) || []).length, 1, `${spec.path}: one active navigation link`);
     for (const expected of spec.content) assert.ok(html.includes(expected), `${spec.path}: ${expected}`);
     if (spec.path === '/projects') {
-      assert.equal((html.match(/class="project-card"/g) || []).length, 15, 'All 15 seeded projects render');
-      assert.equal((html.match(/<time datetime=/g) || []).length, 15, 'Each project renders its date');
-      assert.equal((html.match(/<strong>Location:<\/strong>/g) || []).length, 15, 'Each project renders its location');
-      assert.ok(html.includes('November 14, 2026</time>: Park Cleanup (<em>BrightFuture Builders</em>)'), 'Required Date: Title (Organization) format');
+      assert.equal((html.match(/class="project-card"/g) || []).length, 5, 'Next five seeded projects render');
+      assert.equal((html.match(/<time datetime=/g) || []).length, 5, 'Each project renders its date');
+      assert.equal((html.match(/href="\/project\/\d+"/g) || []).length, 10, 'Each project has detail links');
+      assert.ok(html.includes('href="/organization/1"'), 'Organization detail links render');
     }
     assert.ok(!html.includes('<%'), `${spec.path}: all EJS rendered`);
     for (const image of html.matchAll(/<img[^>]+src="([^"<>]+)"/g)) imagePaths.add(image[1]);
@@ -50,8 +50,9 @@ const verifySite = async () => {
       if (!link[1].startsWith('/') && !link[1].startsWith('#')) continue;
       const url = new URL(link[1], new URL(source, baseUrl));
       if (url.pathname.startsWith('/css/') || url.pathname.startsWith('/images/')) continue;
-      assert.ok(renderedPages.has(url.pathname), `${source}: valid internal route ${url.pathname}`);
-      if (url.hash) assert.ok(renderedPages.get(url.pathname).includes(`id="${url.hash.slice(1)}"`), `${source}: valid anchor ${url.hash}`);
+      const detailRoute = /^\/(organization|project|category)\/\d+$/.test(url.pathname);
+      assert.ok(renderedPages.has(url.pathname) || detailRoute, `${source}: valid internal route ${url.pathname}`);
+      if (url.hash && renderedPages.has(url.pathname)) assert.ok(renderedPages.get(url.pathname).includes(`id="${url.hash.slice(1)}"`), `${source}: valid anchor ${url.hash}`);
     }
   }
   const css = await request('/css/main.css', 200, /text\/css/);
@@ -70,6 +71,7 @@ const verifySite = async () => {
     title: unsafeTitle,
     currentPath: '/',
     navigation: pageSpecs.map((spec) => ({ label: spec.title, href: spec.path })),
+    NODE_ENV: 'test',
   });
   assert.ok(!header.includes(unsafeTitle) && header.includes('&lt;script&gt;'), 'Header escapes title data');
   console.log(`All checks passed for ${baseUrl.origin}; EJS title escaping verified`);

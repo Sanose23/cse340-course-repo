@@ -1,0 +1,6 @@
+W03 60-SECOND STATUS UPDATE
+Student: Joseph Lawal
+
+This week I learned how MVC separates database queries, request coordination, routes, and presentation without breaking the request flow. The most useful part was tracing a detail request from `/project/:id` through the router and controller to a parameterized model query, then passing the returned project and category data to EJS. I also better understand that a missing route is not automatically an Express error, so the catch-all middleware must create a 404 and forward it to the centralized error handler.
+
+The most challenging part was making asynchronous failures behave consistently in Express 4. Wrapping async controllers so rejected promises reach `next(error)` solved the issue and kept error handling out of every controller. Next week I will define failure cases before implementing each feature and test malformed IDs, missing records, empty results, and database failures alongside the successful path.

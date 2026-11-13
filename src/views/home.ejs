@@ -17,7 +17,7 @@
       <div class="network-core"><img class="main-logo" src="/images/cse340-service-network.png" alt="CSE 340 Service Network Logo" width="350" height="154"></div>
       <div class="network-partners">
         <% for (const organization of organizations) { %>
-          <a href="/organizations#organization-<%= organization.organization_id %>" class="network-node"><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" width="100" height="100"><span><%= organization.name.split(' ')[0] %></span></a>
+          <a href="/organization/<%= organization.organization_id %>" class="network-node"><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" width="100" height="100"><span><%= organization.name.split(' ')[0] %></span></a>
         <% } %>
       </div>
       <figcaption>Connecting people with places to serve.</figcaption>
@@ -32,7 +32,7 @@
       </div>
       <div class="category-preview-grid">
         <% for (const [index, category] of categories.entries()) { %>
-          <a class="category-preview accent-<%= ['green', 'blue', 'amber', 'rose'][index % 4] %>" href="/categories#category-<%= category.category_id %>">
+          <a class="category-preview accent-<%= ['green', 'blue', 'amber', 'rose'][index % 4] %>" href="/category/<%= category.category_id %>">
             <span class="category-number"><%= String(index + 1).padStart(2, '0') %></span>
             <h3><%= category.name %></h3><span class="card-arrow" aria-hidden="true">↗</span>
           </a>
@@ -45,7 +45,7 @@
     <div class="section-heading"><div><p class="eyebrow">Start with something simple</p><h2 id="projects-heading">Good things start with showing up.</h2></div><a class="text-link" href="/projects">View service projects <span aria-hidden="true">↗</span></a></div>
     <div class="project-preview-list">
       <% for (const project of projects.slice(0, 3)) { %>
-        <a href="/projects#project-<%= project.project_id %>" class="project-preview"><span><%= project.organization_name %></span><h3><%= project.title %></h3><span class="card-arrow" aria-hidden="true">↗</span></a>
+        <a href="/project/<%= project.project_id %>" class="project-preview"><span><%= project.organization_name %></span><h3><%= project.title %></h3><span class="card-arrow" aria-hidden="true">↗</span></a>
       <% } %>
     </div>
   </section>

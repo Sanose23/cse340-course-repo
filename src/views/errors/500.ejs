@@ -1,0 +1,10 @@
+<%- include('../partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main error-page">
+  <p class="error-code" aria-hidden="true">500</p>
+  <header class="page-heading"><p class="eyebrow">Something went wrong</p><h1>We could not complete this request.</h1><p>We are experiencing technical difficulties. Please try again shortly.</p></header>
+  <a class="button button-primary" href="/">Return to the homepage</a>
+  <% if (NODE_ENV === 'development') { %>
+    <details class="error-details" open><summary>Error details (development only)</summary><pre><%= error %></pre><pre><%= stack %></pre></details>
+  <% } %>
+</main>
+<%- include('../partials/footer') %>
