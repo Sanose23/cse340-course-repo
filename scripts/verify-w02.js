@@ -4,12 +4,13 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
+import { getDatabaseSsl } from '../src/utilities/database-config.js';
 
 const schema = `w02_verify_${process.pid}_${Date.now()}`;
 const projectDirectory = fileURLToPath(new URL('../', import.meta.url));
 const connectionString = process.env.DB_URL || process.env.DATABASE_URL;
 assert.ok(connectionString, 'DB_URL or DATABASE_URL must be set');
-const client = new pg.Client({ connectionString, ssl: true, connectionTimeoutMillis: 10000 });
+const client = new pg.Client({ connectionString, ssl: getDatabaseSsl(connectionString), connectionTimeoutMillis: 10000 });
 let server;
 let schemaCreated = false;
 

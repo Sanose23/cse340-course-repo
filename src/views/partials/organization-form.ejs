@@ -1,0 +1,28 @@
+<form class="editor-form" action="<%= formAction %>" method="POST">
+  <p class="form-note">All fields are required. Organization names must contain 3 to 150 characters.</p>
+  <div class="form-group">
+    <label for="name">Organization Name</label>
+    <input type="text" id="name" name="name" maxlength="150" required value="<%= formData.name || '' %>" autocomplete="organization">
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" maxlength="500" required rows="5"><%= formData.description || '' %></textarea>
+  </div>
+  <div class="form-group">
+    <label for="contactEmail">Contact Email</label>
+    <input type="email" id="contactEmail" name="contactEmail" maxlength="255" required value="<%= formData.contactEmail || '' %>" autocomplete="email">
+  </div>
+  <% if (isEditing) { %>
+    <div class="form-group">
+      <label for="logoFilename">Logo Filename</label>
+      <input type="text" id="logoFilename" name="logoFilename" maxlength="255" required value="<%= formData.logoFilename || '' %>" aria-describedby="logo-help">
+      <p class="field-help" id="logo-help">Use an existing image filename from public/images, such as placeholder-logo.png. File uploads are not supported.</p>
+    </div>
+  <% } else { %>
+    <p class="field-help">New organizations use the shared placeholder logo.</p>
+  <% } %>
+  <div class="button-group">
+    <button class="button button-primary" type="submit"><%= submitLabel %></button>
+    <a class="button button-secondary" href="<%= cancelPath %>">Cancel</a>
+  </div>
+</form>

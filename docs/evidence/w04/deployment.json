@@ -1,0 +1,45 @@
+{
+  "student": "Joseph Lawal",
+  "url": "https://cse340-course-repo-lvip.onrender.com",
+  "serviceId": "srv-dbn58su7bikc73cu20tg",
+  "databaseId": "dpg-dbq6sngae00c73fp9e2g-a",
+  "deployId": "dep-dbtemds9v7es73adnkq0",
+  "deployedAt": "2026-11-16T11:39:40Z",
+  "deploymentMethod": "Verified working-tree archive downloaded during the Render build from a prerelease asset",
+  "releaseUrl": "https://github.com/Sanose23/cse340-course-repo/releases/tag/deploy-w04-20261115",
+  "archiveSha256": "ea99adefb709eca72a63479d32e9304dd1336fd1d45a4451e84dc0ca3d86d959",
+  "localGitCommitCreated": true,
+  "localGitPushPerformed": true,
+  "sessionSecretConfigured": true,
+  "productionDatabaseMigrated": true,
+  "titleLength": 200,
+  "seededCountsAfterCleanup": {
+    "organizations": 3,
+    "projects": 15,
+    "categories": 4,
+    "links": 24
+  },
+  "hostedVerification": {
+    "formPages": 8,
+    "validation": "passed",
+    "flashOnce": "passed",
+    "custom500": "passed",
+    "staticAsset": "passed",
+    "createFlows": 3,
+    "updateFlows": 3,
+    "categoryAssignment": "canonical and alias passed",
+    "missingRecords": "passed",
+    "finalPages": 15,
+    "final404s": 4
+  },
+  "temporaryRecordsRemoved": {
+    "project": 1,
+    "organization": 1,
+    "category": 1,
+    "smokeCategories": 1
+  },
+  "gitCommit": "the commit containing this evidence file",
+  "gitBranch": "main",
+  "sourcePushStatus": "published to origin/main",
+  "postCommitBuildCommand": "npm install"
+}

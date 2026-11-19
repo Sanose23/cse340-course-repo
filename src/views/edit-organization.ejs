@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/organizations">Organizations</a><span aria-hidden="true">/</span><a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a><span aria-hidden="true">/</span><span>Edit</span></nav>
+  <header class="page-heading"><p class="eyebrow">Keep your partner details current</p><h1><%= title %></h1><p>Review the existing details and save your changes.</p></header>
+  <%- include('partials/organization-form', { formAction: `/edit-organization/${organization.organization_id}`, formData, isEditing: true, submitLabel: 'Update Organization', cancelPath: `/organization/${organization.organization_id}` }) %>
+</main>
+<%- include('partials/footer') %>

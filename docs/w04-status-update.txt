@@ -1,0 +1,11 @@
+W04 60-SECOND STATUS UPDATE DRAFT
+Student: Joseph Lawal
+Course source: https://byui-cse.github.io/cse340-ww-course-v2/week04/ponder.html
+
+AI-assisted draft grounded in the repository's implemented behavior and tests. This is not a record of Joseph's personal experience. Review the first-person statements before submitting; no Canvas submission is claimed.
+
+A positive outcome this week is that the Service Network now handles real inserts and updates through forms while keeping database code in models and request coordination in controllers. The edit form shows current data, and the project dropdown can reassign an existing partner without changing the organization table itself. Sessions make success and validation messages survive the redirect and disappear after display.
+
+One challenging part was making failures safe as well as useful. Invalid dates, missing partners, short names, and duplicate categories should not change data. Category replacement also needs a transaction so an error after deleting old links can restore the previous assignments. The local verification checks these cases, including concurrent updates, rather than treating a successful render as proof that persistence is correct.
+
+Next week I would like to review each request path and define both successful and failing cases before changing the application. Before submission I still need to understand the AI-assisted work, complete an actual coaching conversation and required course participation, and verify the authorized hosted deployment. I would appreciate clarification about the different client and server length limits in the published project examples.

@@ -1,0 +1,207 @@
+{
+  "learner": "Joseph Lawal",
+  "browser": "Chrome headless via local CDP",
+  "results": [
+    {
+      "resource": "/new-organization",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/edit-organization/1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/new-project",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/edit-project/1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/new-category",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/edit-category/1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/assign-categories/1",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 1280
+    },
+    {
+      "resource": "/new-organization",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    },
+    {
+      "resource": "/edit-organization/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    },
+    {
+      "resource": "/new-project",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    },
+    {
+      "resource": "/edit-project/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    },
+    {
+      "resource": "/new-category",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    },
+    {
+      "resource": "/edit-category/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    },
+    {
+      "resource": "/assign-categories/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "overflow": false,
+      "labeled": true,
+      "closedForm": true,
+      "required": true,
+      "noMinimum": true,
+      "invalidEmptyCreate": true,
+      "width": 375
+    }
+  ],
+  "categoryServerMinimum": "passed",
+  "categoryPersistence": "passed",
+  "flashOnce": "passed",
+  "browserEmailValidation": "passed",
+  "hostedDeployment": "not performed"
+}

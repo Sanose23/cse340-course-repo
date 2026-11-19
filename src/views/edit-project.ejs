@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/projects">Projects</a><span aria-hidden="true">/</span><a href="/project/<%= project.project_id %>"><%= project.title %></a><span aria-hidden="true">/</span><span>Edit</span></nav>
+  <header class="page-heading"><p class="eyebrow">Keep this opportunity current</p><h1><%= title %></h1><p>Update project details or choose a different partner organization.</p></header>
+  <%- include('partials/project-form', { formAction: `/edit-project/${project.project_id}`, formData, organizations, submitLabel: 'Update Project', cancelPath: `/project/${project.project_id}` }) %>
+</main>
+<%- include('partials/footer') %>

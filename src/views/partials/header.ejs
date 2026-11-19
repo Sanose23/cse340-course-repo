@@ -24,3 +24,9 @@
       </nav>
     </div>
   </header>
+  <% const messages = typeof flash === 'function' ? flash() : {}; %>
+  <% for (const [type, notices] of Object.entries(messages)) { %>
+    <% for (const message of notices) { %>
+      <div class="container alert <%= type %>" role="<%= type === 'error' ? 'alert' : 'status' %>"><%= message %></div>
+    <% } %>
+  <% } %>

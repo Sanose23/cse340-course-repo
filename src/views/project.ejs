@@ -11,6 +11,7 @@
         <div><dt>Location</dt><dd><%= project.location %></dd></div>
         <div><dt>Partner</dt><dd><a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></dd></div>
       </dl>
+      <div class="button-group"><a class="button button-secondary" href="/edit-project/<%= project.project_id %>">Edit Project</a></div>
     </div>
     <aside class="detail-panel" aria-labelledby="category-tags-heading">
       <p class="eyebrow" id="category-tags-heading">Project categories</p>
@@ -19,6 +20,8 @@
           <a class="category-tag" href="/category/<%= category.category_id %>"><%= category.name %></a>
         <% } %>
       </div>
+      <% if (categories.length === 0) { %><p class="field-help">No categories are assigned yet.</p><% } %>
+      <div class="button-group"><a class="button button-secondary" href="/assign-categories/<%= project.project_id %>">Edit Categories</a></div>
     </aside>
   </article>
 </main>

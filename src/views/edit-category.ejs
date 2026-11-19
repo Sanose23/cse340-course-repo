@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/categories">Categories</a><span aria-hidden="true">/</span><a href="/category/<%= category.category_id %>"><%= category.name %></a><span aria-hidden="true">/</span><span>Edit</span></nav>
+  <header class="page-heading"><p class="eyebrow">Keep service categories useful</p><h1><%= title %></h1><p>Rename this category without changing its project assignments.</p></header>
+  <%- include('partials/category-form', { formAction: `/edit-category/${category.category_id}`, formData, submitLabel: 'Update Category', cancelPath: `/category/${category.category_id}` }) %>
+</main>
+<%- include('partials/footer') %>

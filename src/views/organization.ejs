@@ -8,6 +8,7 @@
       <h1><%= organization.name %></h1>
       <p class="detail-description"><%= organization.description %></p>
       <a class="contact-link" href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %> <span aria-hidden="true">↗</span></a>
+      <div class="button-group"><a class="button button-secondary" href="/edit-organization/<%= organization.organization_id %>">Edit Organization</a></div>
     </div>
   </article>
   <section class="related-section" aria-labelledby="organization-projects-heading">

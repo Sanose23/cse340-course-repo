@@ -2,6 +2,9 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { once } from 'node:events';
+import { randomBytes } from 'node:crypto';
+import session from 'express-session';
+import flash from './src/middleware/flash.js';
 import { navigation } from './src/data/site.js';
 import db, { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
@@ -10,9 +13,26 @@ const projectDirectory = fileURLToPath(new URL('.', import.meta.url));
 const nodeEnvironment = process.env.NODE_ENV?.toLowerCase() || 'production';
 const port = Number(process.env.PORT || 3000);
 const host = process.env.HOST || '0.0.0.0';
+const sessionSecret = process.env.SESSION_SECRET || (['development', 'test'].includes(nodeEnvironment) ? randomBytes(64).toString('hex') : '');
+if (sessionSecret.length < 32) throw new Error('Set SESSION_SECRET to a private random value of at least 32 characters.');
 const app = express();
 
+if (nodeEnvironment === 'production') app.set('trust proxy', 1);
 app.use(express.static(path.join(projectDirectory, 'public')));
+app.use(express.urlencoded({ extended: true, limit: '32kb', parameterLimit: 1000 }));
+app.use(express.json({ limit: '32kb' }));
+app.use(session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: nodeEnvironment === 'production',
+  },
+}));
+app.use(flash);
 app.set('view engine', 'ejs');
 app.set('views', path.join(projectDirectory, 'src/views'));
 app.locals.navigation = navigation;

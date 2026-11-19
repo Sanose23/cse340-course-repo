@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/projects">Projects</a><span aria-hidden="true">/</span><a href="/project/<%= project.project_id %>"><%= project.title %></a><span aria-hidden="true">/</span><span>Categories</span></nav>
+  <header class="page-heading"><p class="eyebrow">Connect this project to areas of service</p><h1><%= title %></h1><p><%= project.title %></p></header>
+  <form class="editor-form" action="<%= formAction %>" method="POST">
+    <fieldset class="category-options">
+      <legend>Choose categories for this project</legend>
+      <p class="form-note">Select any number of categories. Clearing every checkbox removes all category assignments.</p>
+      <% for (const category of categories) { %>
+        <div class="checkbox-group">
+          <input type="checkbox" id="category-<%= category.category_id %>" name="categoryIds" value="<%= category.category_id %>" <%= selectedCategoryIds.includes(String(category.category_id)) ? 'checked' : '' %>>
+          <label for="category-<%= category.category_id %>"><%= category.name %></label>
+        </div>
+      <% } %>
+      <% if (categories.length === 0) { %><p>No categories are available yet. <a href="/new-category">Create a category</a>.</p><% } %>
+    </fieldset>
+    <div class="button-group">
+      <button class="button button-primary" type="submit">Update Categories</button>
+      <a class="button button-secondary" href="/project/<%= project.project_id %>">Cancel</a>
+    </div>
+  </form>
+</main>
+<%- include('partials/footer') %>

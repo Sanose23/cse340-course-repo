@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/projects">Projects</a><span aria-hidden="true">/</span><span>New project</span></nav>
+  <header class="page-heading"><p class="eyebrow">Create a new way to help</p><h1><%= title %></h1><p>Describe the service opportunity and choose its partner organization.</p></header>
+  <%- include('partials/project-form', { formAction: '/new-project', formData, organizations, submitLabel: 'Create Project', cancelPath: '/projects' }) %>
+</main>
+<%- include('partials/footer') %>

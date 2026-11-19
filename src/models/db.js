@@ -1,4 +1,5 @@
 import pg from 'pg';
+import { getDatabaseSsl } from '../utilities/database-config.js';
 
 const { Pool } = pg;
 const connectionString = process.env.DB_URL || process.env.DATABASE_URL;
@@ -6,10 +7,9 @@ if (!connectionString) {
   throw new Error('Set DB_URL or DATABASE_URL before starting the application.');
 }
 
-const isRenderInternal = /^dpg-[a-z0-9-]+$/.test(new URL(connectionString).hostname);
 const db = new Pool({
   connectionString,
-  ssl: isRenderInternal ? { rejectUnauthorized: false } : true,
+  ssl: getDatabaseSsl(connectionString),
   connectionTimeoutMillis: 10000,
   query_timeout: 10000,
 });

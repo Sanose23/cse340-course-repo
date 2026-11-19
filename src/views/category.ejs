@@ -2,6 +2,7 @@
 <main tabindex="-1" id="main-content" class="container directory-main">
   <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/categories">Categories</a><span aria-hidden="true">/</span><span><%= category.name %></span></nav>
   <header class="page-heading"><p class="eyebrow">Service category</p><h1><%= category.name %></h1><p>Explore the service projects connected to this area of community work.</p></header>
+  <div class="button-group"><a class="button button-secondary" href="/edit-category/<%= category.category_id %>">Edit Category</a></div>
   <section class="related-section" aria-labelledby="category-projects-heading">
     <div class="section-heading"><h2 id="category-projects-heading">Projects in this category</h2><span class="collection-count"><%= projects.length %> projects</span></div>
     <ul class="related-list">

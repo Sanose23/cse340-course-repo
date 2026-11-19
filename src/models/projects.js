@@ -38,6 +38,33 @@ const getProjectDetails = async (projectId) => {
   return result.rows[0] || null;
 };
 
+const createProject = async (title, description, location, date, organizationId) => {
+  const query = `
+    INSERT INTO project (title, description, location, date, organization_id)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING project_id;
+  `;
+  const result = await db.query(query, [title, description, location, date, organizationId]);
+  if (result.rowCount !== 1) throw new Error('Failed to create service project');
+  return result.rows[0].project_id;
+};
+
+const updateProject = async (projectId, title, description, location, date, organizationId) => {
+  const query = `
+    UPDATE project
+    SET title = $1, description = $2, location = $3, date = $4, organization_id = $5
+    WHERE project_id = $6
+    RETURNING project_id;
+  `;
+  const result = await db.query(query, [title, description, location, date, organizationId, projectId]);
+  if (result.rowCount !== 1) {
+    const error = new Error('Service project not found');
+    error.status = 404;
+    throw error;
+  }
+  return result.rows[0].project_id;
+};
+
 const getProjectsByOrganizationId = async (organizationId) => {
   const query = `
     SELECT project_id, organization_id, title, description, location,
@@ -68,6 +95,8 @@ export {
   getAllProjects,
   getUpcomingProjects,
   getProjectDetails,
+  createProject,
+  updateProject,
   getProjectsByOrganizationId,
   getProjectsByCategoryId,
 };

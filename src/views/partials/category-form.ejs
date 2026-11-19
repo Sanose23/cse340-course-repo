@@ -1,0 +1,11 @@
+<form class="editor-form" action="<%= formAction %>" method="POST">
+  <p class="form-note" id="category-name-help">Category names must contain 3 to 100 characters. The server checks the minimum length.</p>
+  <div class="form-group">
+    <label for="name">Category Name</label>
+    <input type="text" id="name" name="name" maxlength="100" required value="<%= formData.name || '' %>" aria-describedby="category-name-help">
+  </div>
+  <div class="button-group">
+    <button class="button button-primary" type="submit"><%= submitLabel %></button>
+    <a class="button button-secondary" href="<%= cancelPath %>">Cancel</a>
+  </div>
+</form>

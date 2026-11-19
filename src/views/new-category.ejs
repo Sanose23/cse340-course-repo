@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/categories">Categories</a><span aria-hidden="true">/</span><span>New category</span></nav>
+  <header class="page-heading"><p class="eyebrow">Make service easier to discover</p><h1><%= title %></h1><p>Add a new area of service to organize community projects.</p></header>
+  <%- include('partials/category-form', { formAction: '/new-category', formData, submitLabel: 'Create Category', cancelPath: '/categories' }) %>
+</main>
+<%- include('partials/footer') %>
