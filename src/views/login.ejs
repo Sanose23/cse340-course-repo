@@ -1,0 +1,11 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main account-page">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Login</span></nav>
+  <header class="page-heading"><p class="eyebrow">Welcome back</p><h1><%= title %></h1><p>Sign in to access your dashboard and account permissions.</p></header>
+  <form class="editor-form" action="/login" method="POST">
+    <div class="form-group"><label for="email">Email (Username)</label><input type="email" id="email" name="email" maxlength="100" required value="<%= formData.email || '' %>" autocomplete="email"></div>
+    <div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" minlength="7" maxlength="72" required autocomplete="current-password"></div>
+    <div class="button-group"><button class="button button-primary" type="submit">Login</button><a class="button button-secondary" href="/register">Create an account</a></div>
+  </form>
+</main>
+<%- include('partials/footer') %>

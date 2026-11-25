@@ -30,9 +30,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .brand { display: inline-block; flex-shrink: 0; }
 .brand img { width: 162px; }
 .nav-list { display: flex; align-items: center; gap: 6px; }
-.nav-list a { display: block; padding: 11px 18px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; text-decoration: none; }
-.nav-list a:hover { background: #edf0e7; }
+.nav-list a, .nav-form button { display: block; padding: 11px 18px; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer; }
+.nav-list a:hover, .nav-form button:hover { background: #edf0e7; }
 .nav-list a[aria-current="page"] { background: var(--ink); color: var(--white); }
+.nav-form { margin: 0; }
 
 .hero { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 56px; padding-block: 72px 76px; }
 .hero-copy > .eyebrow { margin-bottom: 22px; }
@@ -176,6 +177,14 @@ button.button { min-height: 44px; font-family: inherit; cursor: pointer; }
 .alert.error { border-color: #c28e8e; background: #fbe9e9; color: #762626; }
 .alert.warning { border-color: #b59a59; background: #fff4d7; color: #654d0b; }
 .alert.info { border-color: #7ea5b3; background: #e3f0f6; color: #154e65; }
+.account-panel { max-width: 760px; padding: clamp(22px, 4vw, 36px); border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+.account-panel h2 { font-size: 1.5rem; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--white); }
+.users-table { width: 100%; min-width: 620px; border-collapse: collapse; }
+.users-table th, .users-table td { padding: 16px 18px; border-bottom: 1px solid var(--line); text-align: left; }
+.users-table th { background: #edf0e7; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.users-table tbody tr:last-child td { border-bottom: 0; }
+.role-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--soft-blue); color: var(--ink); font-size: 0.75rem; font-weight: 700; text-transform: capitalize; }
 
 .site-footer { padding-block: 44px 24px; background: #17373d; color: var(--white); }
 .footer-inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px 56px; align-items: start; }

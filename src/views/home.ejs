@@ -8,6 +8,7 @@
       <div class="button-group">
         <a class="button button-primary" href="/projects">Explore service projects <span aria-hidden="true">↗</span></a>
         <a class="button button-secondary" href="/organizations">Meet our partners</a>
+        <% if (isLoggedIn) { %><a class="button button-secondary" href="/dashboard">My Dashboard</a><% } %>
       </div>
       <p class="hero-note"><span class="status-dot" aria-hidden="true"></span> A little time can make a lasting difference.</p>
     </div>

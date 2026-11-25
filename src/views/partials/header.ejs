@@ -20,6 +20,13 @@
           <% for (const item of navigation) { %>
             <li><a href="<%= item.href %>" <% if (currentPath === item.href) { %>aria-current="page"<% } %>><%= item.label %></a></li>
           <% } %>
+          <% if (isLoggedIn) { %>
+            <li><a href="/dashboard" <% if (currentPath === '/dashboard' || currentPath === '/users') { %>aria-current="page"<% } %>>Dashboard</a></li>
+            <li><form class="nav-form" action="/logout" method="POST"><button type="submit">Logout</button></form></li>
+          <% } else { %>
+            <li><a href="/register" <% if (currentPath === '/register') { %>aria-current="page"<% } %>>Register</a></li>
+            <li><a href="/login" <% if (currentPath === '/login') { %>aria-current="page"<% } %>>Login</a></li>
+          <% } %>
         </ul>
       </nav>
     </div>

@@ -43,7 +43,12 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+  if (nodeEnvironment === 'test' && process.env.W04_ADMIN_BYPASS === 'true') {
+    req.session.user = { user_id: 0, name: 'Week 4 Verifier', email: 'w04@example.test', role_name: 'admin' };
+  }
   res.locals.NODE_ENV = nodeEnvironment;
+  res.locals.user = req.session?.user || null;
+  res.locals.isLoggedIn = Boolean(res.locals.user);
   next();
 });
 

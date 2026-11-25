@@ -11,7 +11,7 @@
     <% } %>
   </ul>
   <% if (organizations.length === 0) { %><p>No partner organizations are available yet.</p><% } %>
-  <div class="button-group"><a class="button button-primary" href="/new-organization">Add a New Organization</a></div>
+  <% if (user?.role_name === 'admin') { %><div class="button-group"><a class="button button-primary" href="/new-organization">Add a New Organization</a></div><% } %>
   <aside class="callout"><div><p class="eyebrow">Put your time to good use</p><h2>Find a project that speaks to you.</h2></div><a class="button button-primary" href="/projects">Browse projects <span aria-hidden="true">↗</span></a></aside>
 </main>
 <%- include('partials/footer') %>

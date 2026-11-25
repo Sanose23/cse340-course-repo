@@ -9,7 +9,7 @@
     <% } %>
   </ul>
   <% if (categories.length === 0) { %><p>No service categories are available yet.</p><% } %>
-  <div class="button-group"><a class="button button-primary" href="/new-category">Add a New Category</a></div>
+  <% if (user?.role_name === 'admin') { %><div class="button-group"><a class="button button-primary" href="/new-category">Add a New Category</a></div><% } %>
   <aside class="category-note"><span class="status-dot" aria-hidden="true"></span><p>You do not need to do everything. Find one way to help, and start there.</p></aside>
 </main>
 <%- include('partials/footer') %>

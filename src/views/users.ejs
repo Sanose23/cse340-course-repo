@@ -1,0 +1,13 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main account-page">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/dashboard">Dashboard</a><span aria-hidden="true">/</span><span>Users</span></nav>
+  <header class="page-heading"><p class="eyebrow">Administrator access</p><h1><%= title %></h1><p>Review registered accounts and their assigned roles.</p></header>
+  <div class="table-scroll" role="region" aria-label="Registered users" tabindex="0">
+    <table class="users-table">
+      <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th></tr></thead>
+      <tbody><% for (const account of users) { %><tr><td><%= account.name %></td><td><%= account.email %></td><td><span class="role-badge"><%= account.role_name %></span></td></tr><% } %></tbody>
+    </table>
+  </div>
+  <% if (users.length === 0) { %><p>No registered users are available.</p><% } %>
+</main>
+<%- include('partials/footer') %>

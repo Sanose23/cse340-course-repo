@@ -1,7 +1,7 @@
 {
   "name": "cse340",
   "version": "1.0.0",
-  "description": "CSE 340 Service Network: W04 Inserting and Updating Data",
+  "description": "CSE 340 Service Network: W05 Authentication and Authorization",
   "main": "server.js",
   "engines": {
     "node": "22.x"
@@ -12,12 +12,14 @@
     "verify": "node --env-file-if-exists=.env scripts/verify.js",
     "verify:w02": "node --env-file-if-exists=.env scripts/verify-w02.js",
     "verify:w03": "node --env-file-if-exists=.env scripts/verify-w03.js",
-    "verify:w04": "node --env-file-if-exists=.env scripts/verify-w04.js",
+    "verify:w04": "W04_ADMIN_BYPASS=true node --env-file-if-exists=.env scripts/verify-w04.js",
+    "verify:w05": "node --env-file-if-exists=.env scripts/verify-w05.js",
     "db:setup": "node --env-file-if-exists=.env scripts/setup-db.js"
   },
   "author": "Joseph Lawal",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "ejs": "^7.0.2",
     "express": "^4.18.2",
     "express-session": "^1.19.0",

@@ -31,34 +31,55 @@ import {
   categoryValidation,
   categoryAssignmentValidation,
 } from './controllers/categories.js';
+import {
+  showUserRegistrationForm,
+  processUserRegistrationForm,
+  showLoginForm,
+  processLoginForm,
+  processLogout,
+  requireLogin,
+  requireRole,
+  showDashboard,
+  showUsersPage,
+  registrationValidation,
+  loginValidation,
+} from './controllers/users.js';
 import { testErrorPage } from './controllers/errors.js';
 import { asyncHandler } from './utilities/async-handler.js';
 
 const router = express.Router();
 
 router.get('/', asyncHandler(showHomePage));
+router.get('/register', showUserRegistrationForm);
+router.post('/register', registrationValidation, asyncHandler(processUserRegistrationForm));
+router.get('/login', showLoginForm);
+router.post('/login', loginValidation, asyncHandler(processLoginForm));
+router.get('/logout', asyncHandler(processLogout));
+router.post('/logout', asyncHandler(processLogout));
+router.get('/dashboard', requireLogin, showDashboard);
+router.get('/users', requireRole('admin'), asyncHandler(showUsersPage));
 router.get('/organizations', asyncHandler(showOrganizationsPage));
 router.get('/organization/:id', asyncHandler(showOrganizationDetailsPage));
-router.get('/new-organization', asyncHandler(showNewOrganizationForm));
-router.post('/new-organization', organizationValidation, asyncHandler(processNewOrganizationForm));
-router.get('/edit-organization/:id', asyncHandler(showEditOrganizationForm));
-router.post('/edit-organization/:id', organizationValidation, organizationLogoValidation, asyncHandler(processEditOrganizationForm));
+router.get('/new-organization', requireRole('admin'), asyncHandler(showNewOrganizationForm));
+router.post('/new-organization', requireRole('admin'), organizationValidation, asyncHandler(processNewOrganizationForm));
+router.get('/edit-organization/:id', requireRole('admin'), asyncHandler(showEditOrganizationForm));
+router.post('/edit-organization/:id', requireRole('admin'), organizationValidation, organizationLogoValidation, asyncHandler(processEditOrganizationForm));
 router.get('/projects', asyncHandler(showProjectsPage));
 router.get('/project/:id', asyncHandler(showProjectDetailsPage));
-router.get('/new-project', asyncHandler(showNewProjectForm));
-router.post('/new-project', projectValidation, asyncHandler(processNewProjectForm));
-router.get('/edit-project/:id', asyncHandler(showEditProjectForm));
-router.post('/edit-project/:id', projectValidation, asyncHandler(processEditProjectForm));
+router.get('/new-project', requireRole('admin'), asyncHandler(showNewProjectForm));
+router.post('/new-project', requireRole('admin'), projectValidation, asyncHandler(processNewProjectForm));
+router.get('/edit-project/:id', requireRole('admin'), asyncHandler(showEditProjectForm));
+router.post('/edit-project/:id', requireRole('admin'), projectValidation, asyncHandler(processEditProjectForm));
 router.get('/categories', asyncHandler(showCategoriesPage));
 router.get('/category/:id', asyncHandler(showCategoryDetailsPage));
-router.get('/new-category', asyncHandler(showNewCategoryForm));
-router.post('/new-category', categoryValidation, asyncHandler(processNewCategoryForm));
-router.get('/edit-category/:id', asyncHandler(showEditCategoryForm));
-router.post('/edit-category/:id', categoryValidation, asyncHandler(processEditCategoryForm));
-router.get('/assign-categories/:projectId', asyncHandler(showAssignCategoriesForm));
-router.post('/assign-categories/:projectId', categoryAssignmentValidation, asyncHandler(processAssignCategoriesForm));
-router.get('/project/:projectId/assign-categories', asyncHandler(showAssignCategoriesForm));
-router.post('/project/:projectId/assign-categories', categoryAssignmentValidation, asyncHandler(processAssignCategoriesForm));
+router.get('/new-category', requireRole('admin'), asyncHandler(showNewCategoryForm));
+router.post('/new-category', requireRole('admin'), categoryValidation, asyncHandler(processNewCategoryForm));
+router.get('/edit-category/:id', requireRole('admin'), asyncHandler(showEditCategoryForm));
+router.post('/edit-category/:id', requireRole('admin'), categoryValidation, asyncHandler(processEditCategoryForm));
+router.get('/assign-categories/:projectId', requireRole('admin'), asyncHandler(showAssignCategoriesForm));
+router.post('/assign-categories/:projectId', requireRole('admin'), categoryAssignmentValidation, asyncHandler(processAssignCategoriesForm));
+router.get('/project/:projectId/assign-categories', requireRole('admin'), asyncHandler(showAssignCategoriesForm));
+router.post('/project/:projectId/assign-categories', requireRole('admin'), categoryAssignmentValidation, asyncHandler(processAssignCategoriesForm));
 router.get('/test-error', testErrorPage);
 
 export default router;

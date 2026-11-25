@@ -1,0 +1,11 @@
+W05 60-SECOND STATUS UPDATE DRAFT
+Student: Joseph Lawal
+Course source: https://byui-cse.github.io/cse340-ww-course-v2/week05/ponder.html
+
+AI-assisted draft based on actual implementation and test evidence. It is not a record of Joseph Lawal's personal experience; review the first-person statements before submission. No Canvas submission is claimed.
+
+A positive outcome this week is that authentication and authorization now have separate responsibilities in the application. Registration hashes passwords, login establishes a fresh session, and authorization middleware protects every management request instead of relying on hidden links. The disposable integration test shows that a regular user cannot reach admin pages or submit a direct management POST.
+
+The most challenging part was handling session state safely. A successful login must rotate the session ID, the session must never contain a password hash, and logout must invalidate the authenticated session. Another important distinction was treating bad credentials as a generic login failure while allowing real database failures to reach centralized error handling.
+
+Next week I would define access rules before adding each route and continue testing direct requests, not only visible navigation. Before Week 5 is ready to submit, I still need to review the AI-assisted code, participate in the actual coaching and team requirements, and authorize hosted database/account deployment. A useful instructor clarification would be whether the database refresh is expected when the current free database remains available beyond the course end.

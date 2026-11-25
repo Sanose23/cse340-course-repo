@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+<main tabindex="-1" id="main-content" class="container directory-main account-page">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Dashboard</span></nav>
+  <header class="page-heading"><p class="eyebrow">Your account</p><h1><%= title %></h1><p>Welcome, <%= account.name %>. Your identity and role determine which management tools are available.</p></header>
+  <section class="account-panel" aria-labelledby="account-details-heading">
+    <h2 id="account-details-heading">Account details</h2>
+    <dl class="detail-facts">
+      <div><dt>Name</dt><dd><%= account.name %></dd></div>
+      <div><dt>Email</dt><dd><%= account.email %></dd></div>
+      <div><dt>Role</dt><dd><%= account.role_name %></dd></div>
+    </dl>
+    <% if (account.role_name === 'admin') { %><div class="button-group"><a class="button button-primary" href="/users">View Registered Users</a></div><% } %>
+  </section>
+</main>
+<%- include('partials/footer') %>
